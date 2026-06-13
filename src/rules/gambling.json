@@ -1,0 +1,11 @@
+[
+  {"field": "subject", "pattern": "(赌博|博彩|赌场|赌城|下注|投注|押注|竞猜)", "category": "gambling", "confidence": 0.8, "reason": "subject: gambling keywords"},
+  {"field": "subject", "pattern": "(澳门|拉斯维加斯).{0,10}(?:赌场|娱乐城|娱乐场)", "category": "gambling", "confidence": 0.6, "reason": "subject: casino destinations"},
+  {"field": "subject", "pattern": "(彩票|时时彩|六合彩|北京赛车|PK10|快三|福彩|体彩)", "category": "gambling", "confidence": 0.6, "reason": "subject: lottery/betting"},
+  {"field": "subject", "pattern": "(casino|poker|baccarat|roulette|blackjack|slot)", "category": "gambling", "confidence": 0.6, "reason": "subject: English gambling"},
+  {"field": "content", "pattern": "(赌[场城]).{0,20}(?:在线|网[上络]|注册|开户|充值|提现)", "category": "gambling", "confidence": 0.6, "reason": "content: online casino"},
+  {"field": "content", "pattern": "(?:真人|在线|网[上络]).{0,10}(?:赌|博彩|百家乐|德州扑克)", "category": "gambling", "confidence": 0.6, "reason": "content: live/online gambling"},
+  {"field": "content", "pattern": "(?:注册|开户|充值|首存|返水|返利|优惠).{0,20}(?:送|赠|奖|彩金)", "category": "gambling", "confidence": 0.4, "reason": "content: gambling signup bonuses"},
+  {"field": "content", "pattern": "(?:体育|足球|篮球|电竞).{0,10}(?:投注|竞猜|下注|赔率)", "category": "gambling", "confidence": 0.4, "reason": "content: sports betting"},
+  {"field": "content", "pattern": "(?:彩票|彩种).{0,10}(?:计划|预测|走势|技巧|稳赚|必中)", "category": "gambling", "confidence": 0.4, "reason": "content: lottery winning strategies"}
+]

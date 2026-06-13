@@ -1,0 +1,15 @@
+[
+  {"field": "subject", "pattern": "(验证|确认|核实|激活|认证).{0,10}(?:账号|账户|邮箱|身份|密码|登录)", "category": "phishing", "confidence": 0.6, "reason": "subject: verify/confirm account"},
+  {"field": "subject", "pattern": "(?:账号|邮箱|账户).{0,10}(?:异常|冻结|锁定|被盗|安全|升级|更新)", "category": "phishing", "confidence": 0.6, "reason": "subject: account security issue"},
+  {"field": "subject", "pattern": "(?:系统|安全).{0,10}(?:通知|提醒|警告|告警|升级|维护)", "category": "phishing", "confidence": 0.4, "reason": "subject: system security notice"},
+  {"field": "subject", "pattern": "(?:登录|异地|异常).{0,10}(?:提醒|通知|警告)", "category": "phishing", "confidence": 0.6, "reason": "subject: login activity warning"},
+  {"field": "subject", "pattern": "(re-?activate|re-?validate|upgrade|migrate|verify|confirm).{0,10}(?:account|email|mailbox)", "category": "phishing", "confidence": 0.6, "reason": "subject: re-activate/upgrade email"},
+  {"field": "subject", "pattern": "(blocked|quarantine|pending|held).{0,10}(?:message|email|mail)", "category": "phishing", "confidence": 0.6, "reason": "subject: blocked/quarantined messages"},
+  {"field": "subject", "pattern": "(?:dhl|fedex|ups|usps|ems|快递|物流|包裹).{0,10}(?:通知|提醒|派送|领取)", "category": "phishing", "confidence": 0.4, "reason": "subject: fake delivery notification"},
+  {"field": "content", "pattern": "(?:点击|打开|访问|登录).{0,20}(?:链接|网址|页面|这里|下方|以下)", "category": "phishing", "confidence": 0.25, "reason": "content: urges clicking a link"},
+  {"field": "content", "pattern": "(?:密码|口令).{0,20}(?:过期|失效|修改|更新|重置|找回)", "category": "phishing", "confidence": 0.4, "reason": "content: change password"},
+  {"field": "content", "pattern": "(?:24|48|72)\\s*(?:小时|hour).{0,20}(?:验证|确认|否则|冻结|停用|关闭)", "category": "phishing", "confidence": 0.4, "reason": "content: urgency for account action"},
+  {"field": "content", "pattern": "(?:receive|received|receiving).{0,10}(?:new|pending|blocked|quarantined).{0,10}messages?", "category": "phishing", "confidence": 0.4, "reason": "content: received blocked messages"},
+  {"field": "urls", "pattern": "\\.php\\?(?:email|user|id|login|token|verify)=", "category": "phishing", "confidence": 0.8, "reason": "URL: query parameter for credential"},
+  {"field": "urls", "pattern": "\\b(?:verify|confirm|login|signin|secure|account|webmail|outlook|office365)\\b.*\\.(?:com|net|org)", "category": "phishing", "confidence": 0.15, "reason": "URL: suspicious verification keywords"}
+]

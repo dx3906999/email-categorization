@@ -1,0 +1,34 @@
+# API keys
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# SQLite database
+database/*.db
+
+# Raw log (large)
+database/*.log
+
+# Trained model (large, ~400MB+)
+models/
+
+# Tokenized datasets (large binary)
+data/processed/
+
+# CSV exports
+*.csv
+
+# Generated / intermediate data
+data/*_labeled.jsonl
+data/validation_sample*
+data/low_confidence_sample*
+data/low_confidence.jsonl
+data/cluster_sample.jsonl
+data/report.json
+data/strategy_comparison.json
+data/email_labels.*
+data/bert_only_results.json
+data/fusion_validation*

@@ -1,0 +1,10 @@
+# LLM 标注
+httpx>=0.27
+python-dotenv>=1.0
+
+# BERT 训练
+torch>=2.0
+transformers>=4.40
+datasets>=2.18
+scikit-learn>=1.4
+accelerate>=0.28

@@ -1,0 +1,15 @@
+[
+  {"field": "subject", "pattern": "(展会|展览|展位|展台|搭建|布展|博览)", "category": "marketing", "confidence": 0.6, "reason": "subject: exhibition/trade show"},
+  {"field": "subject", "pattern": "(招标|采购|中标|投标|询价|采购公告)", "category": "marketing", "confidence": 0.6, "reason": "subject: procurement/bidding"},
+  {"field": "subject", "pattern": "(推广|营销|广告|宣传|品牌|策划|推广方案)", "category": "marketing", "confidence": 0.4, "reason": "subject: marketing services"},
+  {"field": "subject", "pattern": "(培训|课程|研修|讲座|沙龙|论坛|峰会)", "category": "marketing", "confidence": 0.25, "reason": "subject: training/events"},
+  {"field": "subject", "pattern": "(会议|研讨会|交流会|发布会|招商)", "category": "marketing", "confidence": 0.25, "reason": "subject: conferences"},
+  {"field": "subject", "pattern": "(newsletter|subscribe|weekly|monthly|digest|update)", "category": "marketing", "confidence": 0.4, "reason": "subject: newsletter"},
+  {"field": "subject", "pattern": "(call\\s+for\\s+papers?|submit|journal|conference|proceedings|open\\s+access)", "category": "marketing", "confidence": 0.4, "reason": "subject: academic CFP"},
+  {"field": "content", "pattern": "(?:有限|责任|集团|科技|实业).{0,5}(?:公司|企业).{0,30}(?:联系|电话|咨询|方案)", "category": "marketing", "confidence": 0.25, "reason": "content: company sales pitch"},
+  {"field": "content", "pattern": "(?:专业|优质|一流|领先|顶尖).{0,10}(?:提供|承接|制作|服务)", "category": "marketing", "confidence": 0.25, "reason": "content: marketing buzzwords"},
+  {"field": "content", "pattern": "(?:电[话联].{0,5}(?:\\d{3,4}[- ]?\\d{6,11}|1[3-9]\\d{9}))", "category": "marketing", "confidence": 0.15, "reason": "content: sales phone contact"},
+  {"field": "content", "pattern": "(?:subscribe|unsubscribe|opt[\\s.-]out|privacy\\s+policy|email\\s+preferences)", "category": "marketing", "confidence": 0.25, "reason": "content: email subscription management"},
+  {"field": "content", "pattern": "(?:limited\\s+time|exclusive\\s+offer|special\\s+offer|don'?t\\s+miss)", "category": "marketing", "confidence": 0.25, "reason": "content: English marketing urgency"},
+  {"field": "sender", "pattern": "(?:marketing|sales|info|news|newsletter|contact|hello|admin|service)@", "category": "marketing", "confidence": 0.15, "reason": "sender: marketing-like address"}
+]

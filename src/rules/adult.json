@@ -1,0 +1,24 @@
+[
+  {"field": "subject", "pattern": "(色情|淫秽|黄色|成人电影|激情|一夜情|裸聊|裸体)", "category": "adult", "confidence": 0.7, "reason": "subject: explicit adult keywords"},
+  {"field": "subject", "pattern": "(美女|性感|少妇|熟女|嫩模|巨乳|大胸|美腿|丝袜)", "category": "adult", "confidence": 0.5, "reason": "subject: female body descriptors"},
+  {"field": "subject", "pattern": "(约炮|约[Pp]|同城约会|上门服务|按摩服务|特殊服务)", "category": "adult", "confidence": 0.8, "reason": "subject: sexual services"},
+  {"field": "subject", "pattern": "(小电影|成人视频|私密视频|偷拍|自拍视频|在线观看)", "category": "adult", "confidence": 0.7, "reason": "subject: adult videos"},
+  {"field": "subject", "pattern": "(?:\\b|_)(?:AV|av)(?:\\b|[女优影视影片在线播放网站]).{0,10}", "category": "adult", "confidence": 0.7, "reason": "subject: AV (adult video) reference"},
+  {"field": "subject", "pattern": "(?:AV女优|AV影片|AV视频|AV电影|AV网站|AV在线|AV播放)", "category": "adult", "confidence": 0.8, "reason": "subject: explicit AV content reference"},
+  {"field": "subject", "pattern": "(小姐|妹子|学生妹|兼职妹|空姐)", "category": "adult", "confidence": 0.15, "reason": "subject: ambiguous — easily confused with invoice scam polite titles"},
+  {"field": "subject", "pattern": "(护士|白领|OL|女大学生).{0,10}(服务|上门|兼职|出台)", "category": "adult", "confidence": 0.5, "reason": "subject: occupation + service context"},
+  {"field": "subject", "pattern": "(私密|私拍|私房|裸模|人体艺术)", "category": "adult", "confidence": 0.3, "reason": "subject: private/erotic content"},
+  {"field": "subject", "pattern": "(horny|sexy|dating|hookup|escort|hot\\s+girl|local\\s+dating)", "category": "adult", "confidence": 0.6, "reason": "subject: English adult solicitation"},
+
+  {"field": "content", "pattern": "(?:AV女优|AV影片|AV视频|AV电影|AV网站|AV在线|AV播放|AV\\s*女)", "category": "adult", "confidence": 0.8, "reason": "content: explicit AV reference"},
+  {"field": "content", "pattern": "(\\bAV\\b|\\bav\\b).{0,10}(?:女优|影片|视频|电影|网站|在线|播放|下载|观看)", "category": "adult", "confidence": 0.7, "reason": "content: AV + video context"},
+  {"field": "content", "pattern": "(小[影视].{0,10}(?:在线|播放|观看|下载|网站|视频))", "category": "adult", "confidence": 0.5, "reason": "content: adult video sites"},
+  {"field": "content", "pattern": "(私[密秘].{0,5}(?:视频|照片|图片|录像|QQ|联系|直播))", "category": "adult", "confidence": 0.5, "reason": "content: private adult media offer"},
+  {"field": "content", "pattern": "(?:加|联系|私聊|私信|咨询).{0,10}(?:QQ|微信|扣扣)[:：]?\\s*\\d{5,12}", "category": "adult", "confidence": 0.15, "reason": "content: QQ/WeChat contact — weak signal, shared with other spam"},
+  {"field": "content", "pattern": "(全[套国國].{0,5}(?:服务|包夜|过夜|上门|兼职|小妹))", "category": "adult", "confidence": 0.7, "reason": "content: full sexual service"},
+  {"field": "content", "pattern": "(?:妹妹|姐姐|妹子|学妹).{0,10}(?:服务|上门|兼职|包夜|漂亮|年轻|温柔)", "category": "adult", "confidence": 0.5, "reason": "content: sex worker service"},
+  {"field": "content", "pattern": "(?:寂寞|空虚|饥渴|想找|找男人).{0,20}(?:女人|少妇|熟女)", "category": "adult", "confidence": 0.5, "reason": "content: sexual desire phrases"},
+
+  {"field": "urls", "pattern": "(?:av|sex|porn|adult|xxx|girl|live|cam|tube|hot).*\\.(?:com|net|tv|vip|xyz|top)", "category": "adult", "confidence": 0.5, "reason": "URL: adult industry domains"},
+  {"field": "urls", "pattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}.*\\.(?:com|net|tv|vip|xyz)", "category": "adult", "confidence": 0.2, "reason": "URL: direct IP links common in adult spam"}
+]

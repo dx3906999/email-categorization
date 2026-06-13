@@ -1,0 +1,24 @@
+[
+  {"field": "subject", "pattern": "(发票|开票|代开|增值税|机打发票|普通发票|专用发票)", "category": "fraud", "confidence": 0.9, "reason": "subject: fake invoices"},
+  {"field": "subject", "pattern": "(?:发票|开票|代开).{0,30}(?:微信|QQ|电话|手机|联系)[:：]?\\s*\\d{5,13}", "category": "fraud", "confidence": 0.9, "reason": "subject: invoice + contact is definitive fraud"},
+  {"field": "subject", "pattern": "(?:增值税|普通发票|专用发票|机打发票)", "category": "fraud", "confidence": 0.95, "reason": "subject: specific invoice types — almost certainly fraud"},
+
+  {"field": "content", "pattern": "(?:代开|开具|办理|提供).{0,10}(?:发票|票据|增值税)", "category": "fraud", "confidence": 0.8, "reason": "content: issue fake invoices"},
+  {"field": "content", "pattern": "(?:发票|开票|票据).{0,30}(?:QQ|微信|电话|联系|手机)[:：]?\\s*\\d{5,13}", "category": "fraud", "confidence": 0.9, "reason": "content: contact for invoice services"},
+  {"field": "content", "pattern": "(?:可开|能开|优惠|低价|代理).{0,10}(?:发票|票据)", "category": "fraud", "confidence": 0.6, "reason": "content: promote invoice services"},
+  {"field": "content", "pattern": "(?:小姐|先生|经理).{0,5}(?:为您|代办|专业|长期)", "category": "fraud", "confidence": 0.4, "reason": "content: polite title + service offer — weak fraud signal"},
+
+  {"field": "subject", "pattern": "(中奖|获奖|大奖|抽奖|幸运|中奖名单|恭喜)", "category": "fraud", "confidence": 0.7, "reason": "subject: winning a prize"},
+  {"field": "content", "pattern": "(?:恭喜|祝贺|通知).{0,20}(?:中奖|获奖|被选中|获得).{0,10}(?:奖品|奖金|大奖)", "category": "fraud", "confidence": 0.6, "reason": "content: false prize"},
+  {"field": "content", "pattern": "(?:领取|兑奖|领奖).{0,10}(?:方式|办法|流程|步骤|奖金)", "category": "fraud", "confidence": 0.4, "reason": "content: claim prize"},
+
+  {"field": "subject", "pattern": "(遗产|继承|遗嘱|受益人|亲属|故去)", "category": "fraud", "confidence": 0.8, "reason": "subject: inheritance"},
+  {"field": "content", "pattern": "(?:遗产|继承).{0,30}(?:律师|银行|转账|转移|帮助)", "category": "fraud", "confidence": 0.6, "reason": "content: inheritance scam"},
+  {"field": "content", "pattern": "(?:urgent|confidential).{0,10}(?:business|proposal|investment|fund|transfer)", "category": "fraud", "confidence": 0.4, "reason": "content: English advance-fee fraud"},
+
+  {"field": "subject", "pattern": "(招聘|兼职|日结|日赚|在家工作|兼职招聘)", "category": "fraud", "confidence": 0.4, "reason": "subject: fake job offer"},
+  {"field": "content", "pattern": "(?:日[赚入挣].{0,5}\\d{2,5}|月[入赚].{0,5}[1-9]万)", "category": "fraud", "confidence": 0.4, "reason": "content: unrealistic income promise"},
+
+  {"field": "content", "pattern": "(?:银行|银行卡|账户).{0,15}(?:转账|汇款|转入|异常|冻结|锁定)", "category": "fraud", "confidence": 0.4, "reason": "content: money transfer pressure"},
+  {"field": "content", "pattern": "(?:客服|工作人员).{0,15}(?:联系|通知|核对|确认|验证)", "category": "fraud", "confidence": 0.25, "reason": "content: masquerades as customer service"}
+]
