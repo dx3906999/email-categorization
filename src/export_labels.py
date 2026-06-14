@@ -1,12 +1,12 @@
 """
 Export email classification results: record_id + spam_type (numeric).
 
-Category mapping (same as BERT training):
-    0 = adult       (色情淫秽)
-    1 = fraud       (假发票/诈骗)
-    2 = gambling    (赌博博彩)
-    3 = marketing   (营销推广)
-    4 = phishing    (钓鱼诈骗)
+Category mapping (v3):
+    0 = adult_violence  (色情暴力)
+    1 = commercial      (博彩营销)
+    2 = phishing        (钓鱼邮件)
+    3 = finance         (发票财务)
+    4 = academic        (学术推广)
 
 Usage:
     python src/export_labels.py                          # default: BERT results → CSV+JSONL
@@ -21,7 +21,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-LABEL2ID = {'adult': 0, 'fraud': 1, 'gambling': 2, 'marketing': 3, 'phishing': 4}
+LABEL2ID = {'adult_violence': 0, 'commercial': 1, 'phishing': 2, 'finance': 3, 'academic': 4}
 ID2LABEL = {v: k for k, v in LABEL2ID.items()}
 
 

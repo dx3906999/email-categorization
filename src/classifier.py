@@ -156,14 +156,14 @@ class IPClassifier:
 # Combined classifier
 # ---------------------------------------------------------------------------
 
-CATEGORIES = ['adult', 'gambling', 'marketing', 'phishing', 'fraud']
+CATEGORIES = ['adult_violence', 'commercial', 'phishing', 'finance', 'academic']
 
 CATEGORY_LABELS = {
-    'adult':       '色情淫秽',
-    'gambling':    '赌博博彩',
-    'marketing':   '营销推广',
-    'phishing':    '钓鱼诈骗',
-    'fraud':       '假发票/诈骗',
+    'adult_violence': '色情暴力',
+    'commercial':     '博彩营销',
+    'phishing':       '钓鱼邮件',
+    'finance':        '发票财务',
+    'academic':       '学术推广',
 }
 
 

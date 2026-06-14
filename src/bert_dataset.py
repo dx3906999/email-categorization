@@ -26,7 +26,7 @@ from sklearn.model_selection import train_test_split
 # Suppress HF warnings
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
-CATEGORIES = ['adult', 'fraud', 'gambling', 'marketing', 'phishing']
+CATEGORIES = ['adult_violence', 'commercial', 'phishing', 'finance', 'academic']
 LABEL2ID = {c: i for i, c in enumerate(CATEGORIES)}
 ID2LABEL = {i: c for c, i in LABEL2ID.items()}
 

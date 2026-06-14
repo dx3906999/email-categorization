@@ -1,8 +1,8 @@
-# 垃圾邮件分类系统 (v2)
+# 垃圾邮件分类系统 (v3)
 
-基于 BERT 的中文垃圾邮件多分类系统。将 24,000 封已拦截的垃圾邮件分为 5 个子类别：色情、赌博、营销、钓鱼、诈骗。
+基于 BERT 的中文垃圾邮件多分类系统。将 24,000 封已拦截的垃圾邮件分为 5 个子类别。
 
-> **v2 更新：** 加入 `from_name` 特征，LLM 验证 Score 89.28 → 90.80。结论逆转：规则不再有益，推荐纯 BERT。
+> **v3 更新：** 重构 5 类分类体系。最小类从 3.1% 提升到 13.3%，极差从 30.1 降到 20.2。
 
 ## 项目结构
 
@@ -19,6 +19,11 @@
 │   ├── compare_low_confidence.py  # 低置信度区间分析
 │   ├── validate_sample.py         # LLM 抽样验证
 │   ├── export_labels.py           # 导出 record_id + spam_type
+│   ├── cluster_labels.py          # 标签聚类 (凝聚聚类)
+│   ├── cluster_traditional.py     # 传统聚类 (embedding + k-means)
+│   ├── design_balanced_cats.py    # 均衡类别设计
+│   ├── open_label_cluster.py      # Open 标签分析
+│   ├── preview_labels.py          # 分类方案分布预览
 │   ├── main.py                    # 入口
 │   └── rules/                     # 规则文件 (JSON, 共 72 条)
 │       ├── adult.json             # 色情 — 20 条
@@ -27,76 +32,63 @@
 │       ├── phishing.json          # 钓鱼 — 13 条
 │       └── fraud.json             # 诈骗 — 17 条
 ├── data/
-│   ├── quality_verification.jsonl           # 验证集 (372条)
-│   ├── quality_verification_labeled.jsonl   # LLM 验证标注
-│   ├── train.jsonl                          # 训练集 (2,080条)
-│   ├── train_labeled.jsonl                  # LLM 训练标注
-│   ├── holdout.jsonl                        # 保留集 (21,548条)
-│   ├── validation_sample.jsonl              # 随机验证样本 (1,000条)
-│   ├── validation_sample_labeled.jsonl      # LLM 验证标注
-│   ├── low_confidence_sample.jsonl          # 低置信度样本 (404条)
-│   ├── low_confidence_sample_labeled.jsonl  # LLM 标注
-│   ├── strategy_comparison.json             # 三策略全量对比结果
-│   ├── email_labels.jsonl                   # 最终导出 (24,000条)
-│   ├── email_labels.csv                     # 最终导出 (CSV)
-│   └── processed/                           # BERT 训练数据
+│   ├── scheme1_sample.jsonl                  # 方案1 训练样本 (2,400条)
+│   ├── scheme1_sample_labeled.jsonl          # LLM 标注结果
+│   ├── open_sample_500.jsonl                 # Open模式 探索样本 (500条)
+│   ├── open_sample_500_labeled.jsonl         # Open标注结果
+│   ├── holdout.jsonl                         # 保留集 (21,548条)
+│   ├── train.jsonl                           # 旧训练集 (2,080条)
+│   ├── quality_verification.jsonl            # 旧验证集 (372条)
+│   ├── email_labels.jsonl                    # 最终导出 (24,000条)
+│   ├── email_labels.csv                      # 最终导出 (CSV)
+│   └── processed/                            # BERT 训练数据
 ├── models/
-│   └── bert_classifier/                     # 训练好的 BERT 模型
+│   └── bert_classifier/                      # 训练好的 BERT 模型
 ├── database/
-│   └── spam_email_data.log                  # 原始日志 (24,000条)
-├── report.md                                # 实验报告 (v2)
+│   └── spam_email_data.log                   # 原始日志 (24,000条)
+├── report.md                                 # 实验报告 (v3)
 ├── requirements.txt
-└── .env                                     # API Key (不提交)
+└── .env                                      # API Key (不提交)
 ```
 
 ## 快速开始
 
 ```bash
-# 1. 创建虚拟环境
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS/Linux
-
-# 2. 安装依赖
+# 1. 安装依赖
 pip install -r requirements.txt
 
-# 3. 配置 API Key
-cp .env.example .env
+# 2. 配置 API Key
 # 编辑 .env 填入 DEEPSEEK_API_KEY
 
-# 4. 导入日志到数据库 + 规则初筛
+# 3. 导入日志到数据库
 python src/main.py pipeline
 
-# 5. 生成数据集 (含 from_name 特征)
-python src/make_datasets.py
+# 4. 抽样 + LLM 标注 (方案1类别)
+python src/llm_label.py data/scheme1_sample.jsonl --concurrency 10
 
-# 6. LLM 标注
-python src/llm_label.py data/quality_verification.jsonl --concurrency 10
-python src/llm_label.py data/train.jsonl --concurrency 10
-
-# 7. 训练 BERT
+# 5. 训练 BERT
 python src/bert_dataset.py
 python src/bert_train.py --train
 
-# 8. 全量分类 + 导出
-python src/compare_strategies.py                    # 三策略对比
-python src/export_labels.py --source bert           # 导出纯BERT结果
+# 6. 全量分类 + 导出
+python src/compare_strategies.py --output data/strategy_comparison_scheme1.json
+python src/export_labels.py --source bert --input data/strategy_comparison_scheme1.json
 ```
 
-## 分类类别
+## 分类类别 (v3)
 
 | 类别 | 标识 | 数字 | 说明 | 占比 |
 |------|------|:---:|------|:----:|
-| 色情淫秽 | `adult` | 0 | 成人内容、色情网站、约炮交友、AV 视频 | 33.2% |
-| 假发票/诈骗 | `fraud` | 1 | 代开发票、增值税、中奖诈骗、遗产诈骗 | 21.9% |
-| 赌博博彩 | `gambling` | 2 | 线上赌场、体育博彩、彩票投注 | 3.1% |
-| 营销推广 | `marketing` | 3 | 展会搭建、招标采购、广告营销、会议征稿 | 23.8% |
-| 钓鱼诈骗 | `phishing` | 4 | 账号验证、密码窃取、虚假通知、快递通知 | 18.0% |
+| 色情暴力 | `adult_violence` | 0 | 色情网站、成人内容、AV视频、偷拍、裸聊约炮、暴力低俗 | 33.5% |
+| 博彩营销 | `commercial` | 1 | 产品推广、展会搭建、招标采购、招聘、博彩、体育赌博、彩票 | 13.3% |
+| 钓鱼邮件 | `phishing` | 2 | 账号验证、邮箱验证、密码窃取、虚假通知、文件诱导、快递诈骗 | 15.6% |
+| 发票财务 | `finance` | 3 | 代开发票、增值税发票、做账报销、财务询价、货款诈骗 | 21.9% |
+| 学术推广 | `academic` | 4 | 学术会议征稿、论文润色、期刊投稿、培训课程、学位认证 | 15.7% |
 
 ## 技术路线
 
 ```
-原始日志 → 规则引擎(初筛) → LLM标注(含from_name) → BERT训练 → 纯BERT分类 → 导出
+原始日志 → LLM open探索(500条) → 设计5类体系 → LLM标注(2,400条) → BERT训练 → 纯BERT分类 → 导出
 ```
 
 ### BERT 输入格式
@@ -110,65 +102,63 @@ python src/export_labels.py --source bert           # 导出纯BERT结果
 ### 日志导入与查询
 
 ```bash
-python src/db.py import                     # 导入日志
-python src/db.py report                     # 统计报告
-python src/db.py categories                 # 分类分布
-python src/db.py search "phishing"          # 全文搜索
-python src/db.py top sender                 # 发件人排名
+python src/db.py import                         # 导入日志
+python src/db.py report                         # 统计报告
+python src/db.py categories                     # 分类分布
+python src/db.py search "phishing"              # 全文搜索
+python src/db.py top sender                     # 发件人排名
 ```
 
 ### 分类
 
 ```bash
-# BERT 分类（推荐）
-python src/classifier.py classify --use-bert                    # 全量融合
+python src/classifier.py classify --use-bert                    # BERT 全量分类
 python src/classifier.py predict "主题" "内容" --use-bert       # 单条预测
 python src/classifier.py predict --record-id <id> --use-bert    # 从数据库查
-
-# 规则分类（仅作参考）
-python src/classifier.py classify --no-ip                       # 仅规则
-python src/classifier.py rules                                  # 查看规则
 ```
 
-### BERT 训练
+### 训练流程
 
 ```bash
-python src/llm_label.py data/train.jsonl --concurrency 10    # LLM 标注训练集
-python src/bert_dataset.py                                    # 准备训练数据
-python src/bert_train.py --train                              # 训练
-python src/bert_train.py --eval-only                          # 评估
+# 探索类别分布
+python src/preview_labels.py                     # 预览方案分布
+python src/llm_label.py data/open_sample.jsonl --mode open
+
+# 标注训练集
+python src/llm_label.py data/scheme1_sample.jsonl --concurrency 10
+
+# 训练
+python src/bert_dataset.py
+python src/bert_train.py --train
+
+# 全量分类 + 导出
+python src/compare_strategies.py --output data/strategy_comparison_scheme1.json
+python src/export_labels.py --source bert
 ```
 
-### 评估与导出
+### 分析工具
 
 ```bash
-python src/compare_strategies.py                             # 三策略全量对比
-python src/compare_low_confidence.py --extract               # 提取低置信度样本
-python src/compare_low_confidence.py --compare               # 低置信度策略对比
-python src/validate_sample.py --sample-only                  # 创建LLM验证样本
-python src/export_labels.py --source bert                    # 导出纯BERT结果
-python src/export_labels.py --source bert --format csv       # 仅CSV
+python src/compare_strategies.py                              # 三策略全量对比
+python src/compare_low_confidence.py --extract --compare      # 低置信度分析
+python src/validate_sample.py --sample-only                   # LLM验证抽样
+python src/export_labels.py --source bert --format csv        # 导出
+python src/llm_label.py data/xxx.jsonl --dry-run              # 查看prompt
 ```
 
-### 数据集管理
-
-```bash
-python src/make_datasets.py                                  # 生成采样
-python src/llm_label.py data/xxx.jsonl --dry-run             # 查看 prompt
-```
-
-## 核心指标 (v2)
+## 核心指标 (v3)
 
 | 指标 | 数值 |
 |------|:----:|
-| BERT 测试集 macro-F1 | 0.944 |
-| LLM 验证准确率 (996条) | 95.6% |
-| 综合评分 Mean IoU | **90.80** |
-| 低置信区间 BERT 准确率 | 53.8% |
-| 低置信区间混合策略效果 | -5.1%（有害） |
-| LLM 蒸馏总成本 | ~¥1.64 |
+| BERT 测试集 macro-F1 | 0.916 |
+| BERT 测试集 accuracy | 93.0% |
+| 全量覆盖率 | 100% |
+| 置信度 ≥0.9 占比 | 95.2% |
+| 最小类占比 | 13.3%（v1/v2 仅 3.1%） |
+| 极差 | 20.2（v1/v2 为 30.1） |
+| LLM 蒸馏总成本 | ~¥1.29 |
 
-> v2 结论：纯 BERT 在所有场景下均优于混合策略，规则引擎无补充价值。详见 [report.md](report.md)。
+> v3 结论：重构 5 类体系后，所有类别占比均 > 13%，分布更加均衡。详见 [report.md](report.md)。
 
 ## 依赖
 
@@ -178,6 +168,7 @@ transformers>=4.40
 datasets>=2.18
 scikit-learn>=1.4
 accelerate>=0.28
+sentence-transformers>=3.0
 httpx>=0.27
 python-dotenv>=1.0
 ```

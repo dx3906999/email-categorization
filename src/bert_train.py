@@ -45,7 +45,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # --- config ---
 
-CATEGORIES = ['adult', 'fraud', 'gambling', 'marketing', 'phishing']
+CATEGORIES = ['adult_violence', 'commercial', 'phishing', 'finance', 'academic']
 ID2LABEL = {i: c for i, c in enumerate(CATEGORIES)}
 LABEL2ID = {c: i for i, c in enumerate(CATEGORIES)}
 

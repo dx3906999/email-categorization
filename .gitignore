@@ -21,14 +21,17 @@ data/processed/
 # CSV exports
 *.csv
 
-# Generated / intermediate data
+# Generated / intermediate data — v3
 data/*_labeled.jsonl
+data/scheme1_sample.jsonl
+data/open_sample_*.jsonl
 data/validation_sample*
 data/low_confidence_sample*
 data/low_confidence.jsonl
 data/cluster_sample.jsonl
+data/cluster_sample_labeled.jsonl
 data/report.json
-data/strategy_comparison.json
+data/strategy_comparison*.json
 data/email_labels.*
 data/bert_only_results.json
 data/fusion_validation*
